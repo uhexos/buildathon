@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: namij
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nami
+    username: ${db_user:user}
+    password: ${db_password:password}
+server:
+  port: 9090
+email:
+  username: ugo
+  password: 4MpybH^g&rsmOg2
+  host: 127.0.0.1
+  port: 8193
+  mailbox: INBOX
+  pollRate: 60000
+  scheme: imap
