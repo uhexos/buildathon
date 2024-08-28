@@ -1,1 +1,1 @@
-ALTER TABLE nami.emails ADD category VARCHAR(250) NULL;
+ALTER TABLE nami.emails ADD location VARCHAR(250) NULL;
