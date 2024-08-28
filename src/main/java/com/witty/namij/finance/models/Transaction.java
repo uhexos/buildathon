@@ -13,11 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Setter
-@Getter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Transaction {
 
   // Getters and Setters
@@ -36,4 +33,15 @@ public class Transaction {
   private BigDecimal availableBalance;
   private BigDecimal currentBalance;
   private String location;
+//  TODO change from category to comment which will then use "AI" to classify
+//  TODO "AI" or user will set the actual category remember to mark the ones  ain fill as suggested by AI
+  private String category;
+
+  public void setCategory(String category) {
+    if (category != null && !category.isEmpty()) {
+      this.category = category.toUpperCase();
+    } else {
+      this.category = category;
+    }
+  }
 }
