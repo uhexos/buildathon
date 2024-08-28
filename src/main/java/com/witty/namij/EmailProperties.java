@@ -22,3 +22,4 @@ public class EmailProperties {
     return String.format("%s://%s:%s@%s:%s/%s",this.scheme, this.username, this.password, this.host, this.port, this.mailbox);
   }
 }
+
