@@ -188,7 +188,7 @@
     const API_BASE_URL = 'http://localhost:9090/api/reports';
 
     async function fetchData(endpoint) {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`);
+        const response = await fetch(`${API_BASE_URL}${endpoint}?startDate=2024-01-01&endDate=2024-12-31`);
         return response.json();
     }
 
