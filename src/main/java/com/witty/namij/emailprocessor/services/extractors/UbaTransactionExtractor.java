@@ -30,7 +30,7 @@ public class UbaTransactionExtractor extends TransactionExtractor {
     transactionDetails.setDescription(extractField(notification, "Transaction Narration"));
     transactionDetails.setAmount(
         new BigDecimal(extractField(notification, "Transaction Amount").replaceAll(",", "")));
-    transactionDetails.setDateTime(
+    transactionDetails.setTransactionDate(
         LocalDateTime.parse(extractField(notification, "Date and Time"), formatter));
     transactionDetails.setAvailableBalance(
         new BigDecimal(extractField(notification, "Available Balance").replaceAll(",", "")));

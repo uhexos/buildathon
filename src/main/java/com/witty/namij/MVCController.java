@@ -11,13 +11,13 @@ public class MVCController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MVCController.class);
 
-    @GetMapping(value = "/login")
+    @GetMapping()
     public String login() {
         LOG.info("/login");
 
         LOG.info("Return login");
 
         //return login.peb located in /resources/templates
-        return "login";
+        return "home";
     }
 }

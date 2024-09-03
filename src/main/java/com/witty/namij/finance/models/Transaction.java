@@ -21,14 +21,14 @@ public class Transaction {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  private String uid;
   private String sender;
   private String receiver;
   private String accountNumber;
   private String transactionType;
   private BigDecimal amount;
   private String currency;
-  private LocalDateTime dateTime;
+  private LocalDateTime transactionDate;
   private String description = "";
   private BigDecimal availableBalance;
   private BigDecimal currentBalance;

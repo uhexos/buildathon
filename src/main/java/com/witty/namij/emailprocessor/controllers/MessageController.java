@@ -16,7 +16,7 @@ public class MessageController {
   @Autowired private TransactionParserService transactionParserService;
 
   // Get all messages
-  @GetMapping
+  @GetMapping("messages")
   public List<Message> getAllMessages() {
     return messageRepository.findAll();
   }
