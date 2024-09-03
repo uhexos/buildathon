@@ -1,0 +1,13 @@
+{
+	"dependencies": {
+		"flowbite": "^2.5.1",
+		"preline": "^2.4.1"
+	},
+	"devDependencies": {
+		"@tailwindcss/forms": "^0.5.8",
+		"tailwindcss": "^3.4.10"
+	},
+	"scripts": {
+		"watch": "pnpm exec tailwindcss -i main.css -o ../resources/static/main.css --watch"
+	}
+}
