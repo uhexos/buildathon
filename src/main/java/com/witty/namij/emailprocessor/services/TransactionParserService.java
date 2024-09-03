@@ -34,7 +34,7 @@ public class TransactionParserService {
                 .orElseThrow(() -> new IllegalArgumentException("No suitable extractor found for the given notification"));
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void importTransactionsFromMessages() {
         messageRepository.findAll().forEach(message -> {
           Optional<Transaction> existingTransaction = transactionRepository.findById(message.getUid().longValue());

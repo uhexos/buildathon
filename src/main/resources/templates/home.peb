@@ -86,3 +86,266 @@
 <!-- End Hero -->
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1>Transaction Volume Over Time</h1>
+<canvas id="transactionVolumeChart"></canvas>
+
+<script>
+    fetch('/api/report/volume-over-time')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(d => d.date);
+                const counts = data.map(d => d.transaction_count);
+
+                const ctx = document.getElementById('transactionVolumeChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Transactions',
+                            data: counts,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            fill: false
+                        }]
+                    }
+                });
+            });
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        #loading {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Transaction Reports</h1>
+    <div id="loading">Loading data...</div>
+    <div class="chart-container">
+        <h2>Transactions by Type</h2>
+        <canvas id="transactionsByTypeChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Daily Transaction Volume</h2>
+        <canvas id="dailyVolumeChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Top 5 Senders</h2>
+        <canvas id="topSendersChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Transaction Distribution by Category</h2>
+        <canvas id="categoryDistributionChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Monthly Average Transaction Amount</h2>
+        <canvas id="monthlyAverageChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const API_BASE_URL = 'http://localhost:9090/api/reports';
+
+    async function fetchData(endpoint) {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`);
+        return response.json();
+    }
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    async function createTransactionsByTypeChart() {
+        const data = await fetchData('/transaction-count-by-type');
+        const ctx = document.getElementById('transactionsByTypeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: Object.keys(data).map(() => getRandomColor())
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Transactions by Type'
+                    }
+                }
+            }
+        });
+    }
+
+    async function createDailyVolumeChart() {
+        const data = await fetchData('/daily-transaction-volume');
+        const ctx = document.getElementById('dailyVolumeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: 'Daily Volume',
+                    data: Object.values(data),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    async function createTopSendersChart() {
+        const data = await fetchData('/top-senders');
+        console.log(data, data.map(item => item.key))
+        const ctx = document.getElementById('topSendersChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels:data.map(item => Object.keys(item)[0]),
+                datasets: [{
+                    label: 'Total Amount Sent',
+                    data: data.map(item => Object.values(item)[0]),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    async function createCategoryDistributionChart() {
+        const data = await fetchData('/transaction-distribution-by-category');
+        const ctx = document.getElementById('categoryDistributionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: Object.keys(data).map(() => getRandomColor())
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Transaction Distribution by Category'
+                    }
+                }
+            }
+        });
+    }
+
+    async function createMonthlyAverageChart() {
+        const data = await fetchData('/monthly-average-transaction-amount');
+        const ctx = document.getElementById('monthlyAverageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: 'Average Transaction Amount',
+                    data: Object.values(data),
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    async function initCharts() {
+        try {
+            await Promise.all([
+                createTransactionsByTypeChart(),
+                createDailyVolumeChart(),
+                createTopSendersChart(),
+                createCategoryDistributionChart(),
+                createMonthlyAverageChart()
+            ]);
+            document.getElementById('loading').style.display = 'none';
+        } catch (error) {
+            console.error('Error loading charts:', error);
+            document.getElementById('loading').textContent = 'Error loading data. Please try again later.';
+        }
+    }
+
+    window.onload = initCharts;
+</script>
+</body>
+</html>
